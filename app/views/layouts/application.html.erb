@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ProjetoPousadaOnrails</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application" %>
+  </head>
+
+  <body>
+    <header>
+      <div> 
+        <% if user_signed_in? %>
+          <%= current_user.email %>  <br> 
+          <li><%= link_to 'Estadias Ativas',  my_active_stays_inn_room_reservation_path(current_user.inn) %></li>
+          <%= button_to 'Sair', destroy_user_session_path, method: :delete %>             
+          <% unless current_user.has_inn? %>  
+           <%= link_to 'Cadastrar Pousada', new_inn_path %><br><br><br>
+          <% end %>
+        <% else %>
+          <%= link_to 'Faça o Login Proprietário', new_user_session_path %> <br>
+          <%= link_to 'Crie uma conta como Proprietário', new_user_registration_path %> <br><br>   
+        <% end %><br><br>
+
+        <% if guest_signed_in? %>
+        <%= current_guest.email %>  <br> 
+        
+        <%= button_to 'Sair', destroy_guest_session_path, method: :delete %>           
+        <% else %>
+          <%= link_to 'Faça o Login Hóspede', new_guest_session_path %> <br>
+          <%= link_to 'Crie uma conta como Hóspede', new_guest_registration_path %> <br><br>   
+        <% end %>
+
+      </div>
+      <div id="search-form">
+        <%= form_tag(search_results_path, method: :get) do %>
+          <%= text_field_tag :search_term, params[:search_term], placeholder: 'Buscar pousadas...' %>
+          <%= submit_tag 'Buscar' %>
+        <% end %>
+      </div>
+</header>
+    
+   <main>
+     <div>
+      <%= alert %>
+      <%= notice %>
+     </div>
+     <%= yield %>
+    </main>
+    <footer>
+    <p>qualquer dúvida favor entrar em contato pelo contato: contato_comigomesmo@outlook.com </p>    
+    </footer>
+  </body>
+</html>

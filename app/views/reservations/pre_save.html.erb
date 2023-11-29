@@ -1,0 +1,21 @@
+<h2>Detalhes do Quarto</h2>
+<p>Nome: <%= @room.name %></p>
+<p>Descrição: <br><%= @room.description %></p>
+
+<h2>Reservar Quarto</h2>
+<%= form_with(model: [@room], url: inn_room_reservations_path(@room.inn, @room), local: true) do |form| %>  
+    <%= form.hidden_field :room_id, value: @room.id %>
+
+    <%= form.label :start_date %>
+    <%= form.date_field :start_date, required: true %>
+
+    <%= form.label :end_date %>
+    <%= form.date_field :end_date, required: true %>
+
+    <%= form.label :number_of_guests %>
+    <%= form.number_field :number_of_guests, required: true %>
+
+    <%= form.submit 'Verificar Disponibilidade' %>
+<% end %>
+
+<%= link_to 'Voltar', root_path %>

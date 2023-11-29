@@ -1,0 +1,18 @@
+<h1>Todas as Pousadas e Quartos Disponíveis</h1>
+
+<h2>Escolha uma cidade:</h2>
+<ul>
+  <% @cities_all.each do |city| %>    
+     <li><%= link_to city, all_home_path(city) %></li>
+  <% end %>
+</ul>
+
+<h4>As 3 Pousadas mais recentes nos nossos registros:</h4>
+<% @latest_inns.each do |inn| %>
+  <p><%= link_to "#{inn.brand_name}" "-  #{inn.city}", inn %></p>
+<% end %>
+
+<h2>Outras Pousadas Cadastradas e Ativas:</h2>
+<% @other_inns.each do |inn| %>
+  <p><%= link_to "#{inn.brand_name} - #{inn.city}", inn %></p>
+<% end %>

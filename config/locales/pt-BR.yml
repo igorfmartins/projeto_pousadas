@@ -1,0 +1,83 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "não pode ficar em branco"
+            password:
+              blank: "não pode ficar em branco"
+        reservation:
+          attributes:
+            guest:
+              required: "é obrigatório"      
+        inn:
+          attributes:
+            brand_name:
+              blank: "não pode ficar em branco"
+            corporate_name:
+              blank: "não pode ficar em branco"
+            cnpj:
+              blank: "não pode ficar em branco" 
+            email:
+              blank: "não pode ficar em branco"
+            state:
+              blank: "não pode ficar em branco"
+            city:
+              blank: "não pode ficar em branco"
+            full_address:
+              blank: "não pode ficar em branco"
+            contact_phone:      
+              blank: "não pode ficar em branco"           
+            zip_code:
+              blank: "não pode ficar em branco"
+        room:
+          attributes:
+            name:
+              blank: "não pode ficar em branco"
+            dimension:
+              blank: "não pode ficar em branco" 
+            daily rate:
+              blank: "não pode ficar em branco"
+            bathroom:      
+              blank: "não pode ficar em branco"
+            max_occupancy:
+              blank: "não pode ficar em branco"                  
+  attributes:
+    label: 'atributo'
+    brand_name: "Nome Fantasia"
+    corporate_name: "Razão Social"
+    cnpj: "CNPJ"
+    contact_phone: "Telefone de Contato"
+    email: "E-mail"
+    full_address: "Endereço Completo"
+    state: "Estado"
+    city: "Cidade"
+    zip_code: "CEP"
+    description: "Descrição"
+    rooms_max: "Número Máximo de Quartos"
+    pets_accepted: "Animais de Estimação Aceitos"
+    breakfast: "Café da Manhã"
+    camping: "Área de Camping"
+    accessibility: "Acessibilidade"
+    policies: "Políticas"
+    payment_methods: "Métodos de Pagamento"
+    checkin_start_time: "Horário de Início do Check-in"
+    checkin_end_time: "Horário Máximo do Check-out"
+    name: "Nome"
+    dimension: "Dimensão"
+    max_occupancy: "Ocupação Máxima"
+    daily_rate: "Diária"
+    bathroom: "Banheiro"
+    balcony: "Varanda"
+    air_conditioning: "Ar Condicionado"
+    tv: "TV"
+    wardrobe: "Guarda-roupa"
+    safe: "Cofre"
+    accessible: "Acessível"
+    available: "Disponível"
+    start_date: "Início"
+    end_date: "Término"
+    daily_rate: "Diária"
+

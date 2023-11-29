@@ -1,0 +1,11 @@
+<h2>Minhas Reservas</h2>
+
+<% @reservations.each do |reservation| %>
+  <p>
+    Pousada: <%= reservation.room.inn.brand_name %><br>
+    Data de Entrada: <%= reservation.start_date.strftime('%d/%m/%Y') %><br>
+    Data de Saída: <%= reservation.end_date.strftime('%d/%m/%Y') %><br>
+    Valor da Reserva: <%= number_to_currency(reservation.room.daily_rate) %><br>
+    -------------------------------------------
+  </p>
+<% end %>

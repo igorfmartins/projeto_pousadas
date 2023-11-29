@@ -1,0 +1,75 @@
+<h1><%= @inn.brand_name %></h1>
+<h2> Aqui as informações e detalhes da Pousada.</h2>
+
+<% if user_signed_in? || (current_user.present? && current_user.id == @inn.id) %>
+  <%= link_to 'Cadastrar Quartos', new_inn_room_path(@inn) %><br><br><br>
+ 
+  <dt>Razão Social:</dt>
+  <dd><%= @inn.corporate_name %></dd><br>
+
+  <dt>CNPJ:</dt>
+  <dd><%= @inn.cnpj %></dd><br>
+<% end %>
+
+<dl>
+  <dt>Descrição:</dt>
+  <dd><%= @inn.description %></dd><br>
+
+  <dt>Telefone:</dt>
+  <dd><%= @inn.contact_phone %></dd><br>
+
+  <dt>Email:</dt>
+  <dd><%= @inn.email %></dd><br>
+
+  <dt>Endereço:</dt>
+  <dd><%= @inn.full_address %>, <%= @inn.city %> - <%= @inn.state %>, <%= @inn.zip_code %></dd><br>
+  
+  <dt>Políticas:</dt>
+  <dd><%= @inn.policies %></dd><br><br>
+  
+  <dt>Número Máximo de Quartos:</dt>
+  <dd><%= @inn.rooms_max %></dd><br>
+
+  <dt>Aceita Pets:</dt>
+  <dd><%= @inn.pets_accepted ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>Serve Café da Manhã:</dt>
+  <dd><%= @inn.breakfast ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>Possui Área de Camping:</dt>
+  <dd><%= @inn.camping ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>Acessibilidade:</dt>
+  <dd><%= @inn.accessibility ? 'Sim' : 'Não' %></dd><br>  
+
+  <dt>Métodos de Pagamento:</dt>
+  <dd><%= @inn.payment_methods %></dd><br>
+
+  <dt>Horário de Check-in:</dt>
+  <dd><%= @inn.check_in_time.present? ? @inn.check_in_time.strftime('%H:%M') + 'h' : 'N/A' %></dd><br>
+
+  <dt>Horário de Check-out:</dt>
+  <dd><%= @inn.check_in_time.present? ? @inn.check_in_time.strftime('%H:%M') + 'h' : 'N/A' %></dd><br>
+
+  <dt>Status:</dt>
+  <dd><%= @inn.active ? 'Ativa' : 'Inativa' %></dd><br>
+</dl>
+
+<h3><strong> Quartos Disponíveis </strong></h3>
+<% if @available_rooms.any? %>
+  <dd>
+    <ul>
+      <% @available_rooms.order(:name).each do |room| %>
+        <li>
+          <%= link_to room.name, inn_room_path(@inn, room) %> 
+        </li>
+      <% end %>
+    </ul>
+  </dd>
+<% else %>
+  <dt>Quartos: Nenhum quarto disponível.</dt>
+<% end %>
+
+<%= link_to 'Editar Pousada', edit_inn_path(@inn)   %><br>
+
+<%= link_to 'Voltar', root_path %>

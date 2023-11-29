@@ -1,0 +1,14 @@
+<h2>Resultados da Busca</h2>
+
+<% if @results.any? %>
+  <p>Foram encontrados <%= @results.count %> resultados para '<%= params[:search_term] %>'</p>
+  <ul>
+    <% @results.each do |pousada| %>
+      <li><%= link_to pousada.brand_name, inn_path(pousada) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Nenhuma pousada encontrada para '<%= params[:search_term] %>'</p>
+<% end %>
+
+<%= link_to 'Voltar', root_path %>

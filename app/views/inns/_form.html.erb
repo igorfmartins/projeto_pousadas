@@ -1,0 +1,90 @@
+
+<%= form_with(model: @inn, local: true) do |f| %>     
+    <%= f.hidden_field :user_id, value: current_user.id %>
+    <div>
+      <%= f.label :brand_name %>
+      <%= f.text_field :brand_name %>
+    </div>
+    <div>
+      <%= f.label :corporate_name %>
+      <%= f.text_field :corporate_name %>
+    </div>
+    <div>
+      <%= f.label :cnpj %>
+      <%= f.text_field :cnpj %>
+    </div>
+    <div>
+      <%= f.label :contact_phone %>
+      <%= f.text_field :contact_phone %>
+    </div>
+    <div>
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+    </div>
+    <div>
+      <%= f.label :full_address %>
+      <%= f.text_field :full_address %>
+    </div>
+    <div>
+    <%= f.label :state %>
+    <%=f.text_field :state %>
+    </div>
+    </div>
+    <div>
+      <%= f.label :city %>
+      <%= f.text_field :city %>
+    </div>
+    <div>
+      <%= f.label :zip_code %>
+      <%= f.text_field :zip_code %>
+    </div>
+    <div>
+      <%= f.label :description %>
+      <%= f.text_area :description %>
+    </div>
+    <div>
+      <%= f.label :rooms_max %>
+      <%= f.number_field :rooms_max %>
+    </div>
+    <div>
+      <%= f.label :pets_accepted %>
+      <%= f.check_box :pets_accepted %>
+    </div>
+    <div>
+      <%= f.label :breakfast %>
+      <%= f.check_box :breakfast %>
+    </div>
+    <div>
+      <%= f.label :camping %>
+      <%= f.check_box :camping %>
+    </div>
+    <div>
+      <%= f.label :accessibility %>
+      <%= f.text_field :accessibility %>
+    </div>
+    <div>
+      <%= f.label :policies %>
+      <%= f.text_area :policies %>
+    </div>
+    <div>
+      <%= f.label :payment_methods %>
+      <%= f.text_field :payment_methods %>
+    </div>
+    <div>
+      <%= f.label :check_in_time, 'Horario do Início de Check-in' %>
+      <%= f.time_field :check_in_time %>
+    </div>
+    <div>
+      <%= f.label :check_out_time,'Horario Máximo de Check-out'  %>
+      <%= f.time_field :check_out_time %>
+    </div>
+    <div>
+      <%= f.label :active, 'Pousada Disponível' %>
+      <%= f.check_box :active %>
+    </div> 
+    <div>
+      <%= f.hidden_field :user_id, value: current_user.id %>
+    <div>
+      <%= f.submit 'Cadastrar Pousada' %>    
+    </div>
+  <% end %>

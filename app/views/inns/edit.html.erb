@@ -1,0 +1,14 @@
+<h1> Editar Pousada </h1>
+
+<%= render 'form' %>
+
+<% if @inn.present? && @inn.errors.any? %>
+  <div class="alert alert-danger">
+    <h4>Ops! Houve alguns problemas com o cadastro da pousada:</h4>
+    <ul>
+      <% @inn.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

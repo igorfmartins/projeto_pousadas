@@ -1,0 +1,10 @@
+<h1><%= @room.name %></h1>
+<h2> Detalhes dos Preços  </h2>
+
+<p>Start Date: <%= @price.start_date %></p>
+<p>End Date: <%= @price.end_date %></p>
+<p>Daily Rate: <%= @price.daily_rate %></p>
+
+<%= button_to 'Remover Preço', inn_room_price_path(@room.inn, @room, @price), method: :delete %>
+<br>
+<%= link_to 'Voltar', root_path %>

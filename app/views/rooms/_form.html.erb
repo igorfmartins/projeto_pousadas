@@ -1,0 +1,58 @@
+<%= form_with(model: [@inn, @room], local: true) do |f| %>
+  <%= f.hidden_field :inn_id, value: current_user.id %>  
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div>
+    <%= f.label :description %>
+    <%= f.text_area :description %> 
+  </div>
+  <div>
+    <%= f.label :dimension %>
+    <%= f.number_field :dimension %> m² 
+  </div>
+  <div>
+    <%= f.label :max_occupancy %>
+    <%= f.number_field :max_occupancy %>
+  </div>
+  <div>
+    <%= f.label :daily_rate %> R$
+    <%= f.text_field :daily_rate %>
+  </div>
+  <div>
+    <%= f.label :bathroom %>
+    <%= f.check_box :bathroom %>
+  </div>
+  <div>
+    <%= f.label :balcony %>
+    <%= f.check_box :balcony %>
+  </div>
+  <div>
+    <%= f.label :air_conditioning %>
+    <%= f.check_box :air_conditioning %>
+  </div>
+  <div>
+    <%= f.label :tv %>
+    <%= f.check_box :tv %>
+  </div>
+  <div>
+    <%= f.label :wardrobe %>
+    <%= f.check_box :wardrobe %>
+  </div>
+  <div>
+    <%= f.label :safe %>
+    <%= f.check_box :safe %>
+  </div>
+  <div>
+    <%= f.label :accessible %>
+    <%= f.check_box :accessible %>
+  </div>
+  <div>
+    <%= f.label :available %>
+    <%= f.check_box :available %>
+  </div>
+  <div>
+    <%= f.submit 'Cadastrar Quarto' %>    
+  </div>
+<% end %>

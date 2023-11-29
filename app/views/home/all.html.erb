@@ -1,0 +1,13 @@
+<h2>Pousadas em <%= @selected_city %></h2>
+
+<ul>
+  <% if @pousadas_na_cidade.any? %>
+    <% @pousadas_na_cidade.order(:brand_name).each do |pousada| %>
+       <li><%= link_to pousada.brand_name, inn_path(pousada) %></li>
+    <% end %>
+  <% else %>
+    <li>Nenhuma pousada encontrada nesta cidade.</li>
+  <% end %>
+</ul>
+
+<%= link_to 'Voltar', root_path %>

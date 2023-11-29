@@ -1,0 +1,63 @@
+<h1><%= @room.name %></h1>
+<h2> Detalhes do Quarto </h2>
+
+<dl>
+  <dt>Descrição:</dt>
+  <dd><%= @room.description %></dd><br>
+
+  <dt>Dimensão (m²):</dt>
+  <dd><%= @room.dimension %></dd><br>
+
+  <dt>Capacidade Máxima de Hóspedes:</dt>
+  <dd><%= @room.max_occupancy %></dd><br>
+
+  <dt>Banheiro:</dt>
+  <dd><%= @room.bathroom ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>Varanda:</dt>
+  <dd><%= @room.balcony ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>Ar Condicionado:</dt>
+  <dd><%= @room.air_conditioning ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>TV:</dt>
+  <dd><%= @room.tv ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>Guarda-Roupa:</dt>
+  <dd><%= @room.wardrobe ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>Cofre:</dt>
+  <dd><%= @room.safe ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>Acessibilidade:</dt>
+  <dd><%= @room.accessible ? 'Sim' : 'Não' %></dd><br>
+
+  <dt>Disponível para Reserva:</dt>
+  <dd><%= @room.available ? 'Sim' : 'Não' %></dd><br>
+</dl>
+
+<h2> Valor diária e Preços especiais de Temporada </h2>
+<dt>Diária:</dt>
+<dd><%= number_to_currency(@room.daily_rate) %></dd><br>
+<% @room.prices.each do |price| %>
+  <p>
+    <%= "#{price.start_date.strftime('%d/%m')} até #{price.end_date.strftime('%d/%m')}: #{number_to_currency(price.daily_rate)}" %><br>
+    <% if current_user && current_user.inn.present? && @room.inn.present? && current_user.inn.id == @room.inn.id %>    
+      <%= link_to 'Detalhes do Preço', inn_room_price_path(@room.inn, @room, price) %><br>
+    <% end %>
+  </p>
+<% end %>
+
+<% if guest_signed_in? %>
+  <%= link_to 'Reservar Agora', new_inn_room_reservation_path(room_id: @room.id) %><br>
+<% else %>
+  <%= link_to 'Reservar Agora', pre_save_inn_room_reservation_path(room_id: @room.id) %><br>
+<% end %>
+
+<% if current_user && current_user.inn.present? && @room.inn.present? && current_user.inn.id == @room.inn.id %>
+
+  <%= link_to 'Adicionar Preço Personalizado', new_inn_room_price_path(@room.inn, @room) %><br>
+  <%= link_to 'Editar Quarto', edit_inn_room_path(@room) %><br><br>
+<% end %>
+
+<%= link_to 'Voltar', root_path %>

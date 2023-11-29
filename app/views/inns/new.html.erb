@@ -1,0 +1,24 @@
+<h1> Cadastro de Pousadas </h1>
+
+<%= render 'form' %>
+
+<% if @inn.present? && @inn.errors.any? %>
+  <div class="alert alert-danger">
+    <h4>Ops! Houve alguns problemas com o cadastro da pousada:</h4>
+    <ul>
+      <% @inn.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<% if @inn.persisted? %>
+  <p>Sua pousada foi cadastrada com sucesso!</p>
+  <p>Agora você pode adicionar quartos para a sua pousada:</p>
+  <p><%= link_to 'Cadastrar Quartos', new_inn_room_path(@inn) %></p>
+<% end %>
+
+
+<%= link_to('Voltar', root_path)%>

@@ -1,0 +1,16 @@
+<h1>Novo Quarto</h1>
+
+<h1> Cadastro de Quartos </h1>
+
+<%= render 'form' %>
+
+<% if @room.errors.any? %>
+  <p>Verifique os erros abaixo:</p>
+  <ul>
+    <% @room.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to 'Voltar', root_path%>
