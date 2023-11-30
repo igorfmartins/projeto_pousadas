@@ -38,4 +38,9 @@ Rails.application.routes.draw do
   resources :cities, only: [] do
     get 'pousadas', to: 'cities#pousadas'
   end
+
+  namespace :api do
+    get :list_all_inns_available, to: 'inns#list_available_inns'
+    get :room_details, to: 'inns#room'
+  end
 end

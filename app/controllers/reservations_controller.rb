@@ -13,6 +13,9 @@ class ReservationsController < ApplicationController
     end
   
     def pre_confirmation
+      unless user_signed_in?
+        return redirect_to new_guest_registration_url
+      end
       existing_reservations = Reservation.where(
         room_id: @room.id,
         start_date: session[:non_user][:start_date],
@@ -21,7 +24,7 @@ class ReservationsController < ApplicationController
   
       if existing_reservations.empty?
         flash.now[:alert] = 'Este quarto está livre para as datas escolhidas.'
-        render
+        redirect_to 
       else
         flash.now[:alert] = 'Este quarto já está reservado para as datas escolhidas.'
         render 'pre_save'
@@ -132,7 +135,7 @@ class ReservationsController < ApplicationController
     private
   
     def set_room
-      @room = Room.find(params[:room_id])
+      @room = Room.find(params['room_id'])
     end
   
     def reservation_params

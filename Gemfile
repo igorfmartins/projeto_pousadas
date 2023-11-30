@@ -18,6 +18,8 @@ gem 'bootsnap', require: false
 gem "devise"
 gem 'br_documents'
 gem 'brazilian-rails'
+gem 'faker'
+gem 'pry'
 
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
