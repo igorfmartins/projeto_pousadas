@@ -104,11 +104,12 @@ class ReservationsController < ApplicationController
     end
   end    
 
-  def finish
-    #parando aqui aff
-    @reservation = Reservation.find(params[:id])
+  def finish_stay
+    @reservation = Reservation.find(params["reservation_id"])
+    start_day = @reservation.attributes['start_date'].strftime("%Y%m%d").to_i
+    end_day = @reservation.attributes['end_date'].strftime("%Y%m%d").to_i      
+    total_days = (end_day - start_day) + 1
     
-    total_days = (@reservation.end_date - @reservation.start_date).to_i + 1
       checkout_date = Date.current
       @total_paid = calculate_total_paid(@reservation.start_date, checkout_date, total_days)
 

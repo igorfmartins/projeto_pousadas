@@ -14,18 +14,19 @@ Rails.application.routes.draw do
     get 'finish_checkout', to: 'reservations#finish_checkout'   
     get 'my_stays', to: 'reservations#my_stays'
     get 'my_active_stays', to: 'reservations#my_active_stays'
-    post 'finish_stay', to: 'reservations#finish'
-
+    
     resources :rooms, only: [:new, :create, :show, :edit, :update] do 
       resources :prices, only: [:new, :create, :show, :destroy]
       resources :reservations, only: [:show, :new, :create, :destroy] do
         resource :rating, only: [:new, :create] do
           resource :user_response, only: [:new, :create]
         end
+        
         get 'pre_save', on: :member
         get 'confirmation', on: :member
         get 'pre_confirmation', on: :member
         get 'ready', on: :member 
+        post 'finish_stay', to: 'reservations#finish_stay'
 
         member do
           
@@ -41,6 +42,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     get :list_all_inns_available, to: 'inns#list_available_inns'
-    get :room_details, to: 'inns#room'
+    get :room_details, to: 'inns#room_details'
+    get :verify_reservation, to: 'reservations#verify_reservation'
   end
 end

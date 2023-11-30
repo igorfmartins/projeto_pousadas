@@ -12,8 +12,8 @@
       <%= "Data de Saída: #{full_reservation.attributes['end_date']}" %>
       <br>
       <%= "Número de Hóspedes: #{full_reservation.attributes['number_of_guests']}" %>  
-      <%= button_to 'Finalizar Estadia',  inn_finish_stay_path(@inn, full_reservation) %>
-    </div>
+      <%= button_to 'Finalizar Estadia', inn_room_reservation_finish_stay_path(@inn, full_reservation.room, full_reservation) %>
+      </div>
   <% end %>
 <% else %>
   <p>Não existem reservas ativas.</p>
