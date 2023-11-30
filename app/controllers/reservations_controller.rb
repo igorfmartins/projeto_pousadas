@@ -1,9 +1,8 @@
 class ReservationsController < ApplicationController
-    before_action :set_room, only: [:pre_save, :new, :create, :confirmation]
+    before_action :set_room, only: [:pre_save, :pre_confirmation, :new, :create, :confirmation, :my_stays]
     before_action :authenticate_guest!, only: [:new, :create, :confirmation, :ready, :destroy, :checkin]
   
-    def pre_save
-      @room
+    def pre_save   
       session[:non_user] = {
         start_date: params[:start_date],
         end_date: params[:end_date],
@@ -24,25 +23,23 @@ class ReservationsController < ApplicationController
   
       if existing_reservations.empty?
         flash.now[:alert] = 'Este quarto está livre para as datas escolhidas.'
-        redirect_to 
+        redirect_to confirmation_inn_room_reservation_path
       else
         flash.now[:alert] = 'Este quarto já está reservado para as datas escolhidas.'
         render 'pre_save'
       end
     end
   
-    def new
-      @room
+    def new   
       @reservation = Reservation.new(room: @room)
       @daily = @room.daily_rate
     end
   
-    def create
-      @room
+    def create    
       @reservation = Reservation.new(reservation_params.merge(room: @room))
       @reservation.pre_status = 'pendente'
   
-      if @reservation.available?
+      if @reservation.available?      
         if @reservation.save
           redirect_to confirmation_inn_room_reservation_path(inn_id: @room.inn.id, room_id: @room.id, id: @reservation.id)
         else
@@ -104,10 +101,9 @@ class ReservationsController < ApplicationController
     end    
 
     def finish_stay
-      @reservation = Reservation.find(params[:id])
-  
-      if @reservation.active_stay? && @reservation.checkout_datetime.nil?
-        total_days = (@reservation.end_date - @reservation.start_date).to_i + 1
+      @reservation = Reservation.find(params['reservation_id'])
+      
+      total_days = (@reservation.end_date - @reservation.start_date).to_i + 1
         checkout_date = Date.current
         @total_paid = calculate_total_paid(@reservation.start_date, checkout_date, total_days)
   
@@ -119,16 +115,15 @@ class ReservationsController < ApplicationController
         )
   
         if @reservation.rated?
-          redirect_to byebye_inn_path(@reservation.inn), notice: 'Estadia finalizada com sucesso!'
+          redirect_to finish_checkout_inn_path(@reservation.inn), notice: 'Estadia finalizada com sucesso!'
         else
           redirect_to new_reservation_rating_path(@reservation), notice: 'Por favor, avalie sua estadia.'
         end
-      else
-        redirect_to my_reservations_path(@reservation), alert: 'A estadia não pode ser finalizada.'
-      end
+    
+      
     end
 
-    def byebye
+    def finish_checkout
 
     end
   
@@ -148,27 +143,6 @@ class ReservationsController < ApplicationController
           reservation.cancel_by_owner
         end
       end
-    end
-
-    def calculate_partial_day_payment
-        partial_day_payment = @reservation.room.daily_rate / 2
-        # Se o check-out ocorrer depois do meio-dia, cobre o dia parcial do check-out
-        checkout_hour > 12 ? partial_day_payment : 0
-    end
-
-    def calculate_total_paid(start_date, checkout_date, total_days)
-        checkout_time = Time.now
-        checkout_time = Time.parse('12:00 PM') if checkout_time.hour > 12
-      
-        if checkout_date == Date.current && checkout_time.hour < 12
-          # Se o check-out ocorrer antes do horário padrão, cobre a diária completa
-          total_paid = @reservation.room.daily_rate * total_days
-        else
-          # Caso contrário, calcule o valor proporcional
-          total_paid = @reservation.room.daily_rate * (total_days - 1) + calculate_partial_day_payment(checkout_time.hour)
-        end
-      
-        total_paid
-    end
+    end 
 end
   

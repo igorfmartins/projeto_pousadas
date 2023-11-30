@@ -19,7 +19,7 @@ p "############### INITIALIZING SEEDS ###############"
   )
 end
 
-# Visitantes
+# Hóspedes
 3.times do
   Guest.create!(
     full_name: Faker::Name.name,

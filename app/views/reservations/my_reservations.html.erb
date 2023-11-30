@@ -3,10 +3,15 @@
   <p>
     Pousada: <%= reservation.room.inn.brand_name %><br>
     Quarto: <%= reservation.room.name %><br>
-    Data de Entrada: <%= reservation.start_date.strftime('%d/%m/%Y') %><br>
-    Data de Saída: <%= reservation.end_date.strftime('%d/%m/%Y') %><br>
+    <% if reservation.start_date %>
+      Data de Entrada: <%= reservation.start_date.strftime('%d/%m/%Y') %><br>
+    <% end %>
+    <% if reservation.end_date %>
+      Data de Saída: <%= reservation.end_date.strftime('%d/%m/%Y') %><br>
+    <% end %>
     Valor da Reserva: <%= number_to_currency(reservation.room.daily_rate) %><br>
-    -------------------------------------------
+  </p>
+
   </p>
 
   <% if reservation.status == 'completed' && !reservation.rated? %>

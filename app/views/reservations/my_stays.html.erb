@@ -8,9 +8,8 @@
       <p>Número de Hóspedes: <%= stay.number_of_guests %></p>
       <p>Data de Entrada: <%= stay.start_date %></p>
       <p>Data de Saída: <%= stay.end_date %></p>    
-
-      <%= button_to 'Finalizar Estadia', finish_stay_inn_room_reservation_path(stay.inn_id, stay.room_id, stay), method: :post %>
-
+      <%= button_to 'Finish Stay', finish_stay_inn_room_reservation_path(@reservation.inn_id, @reservation.room_id, @reservation), method: :post %>
+      
     </div>
   <% end %>
 <% else %>

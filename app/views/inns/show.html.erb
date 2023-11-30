@@ -49,7 +49,7 @@
   <dd><%= @inn.check_in_time.present? ? @inn.check_in_time.strftime('%H:%M') + 'h' : 'N/A' %></dd><br>
 
   <dt>Horário de Check-out:</dt>
-  <dd><%= @inn.check_out_time.present? ? @inn.check_out_time.strftime('%H:%M') + 'h' : 'N/A' %></dd><br>
+  <dd><%= @inn.check_in_time.present? ? @inn.check_in_time.strftime('%H:%M') + 'h' : 'N/A' %></dd><br>
 
   <dt>Status:</dt>
   <dd><%= @inn.active ? 'Ativa' : 'Inativa' %></dd><br>  
@@ -69,6 +69,7 @@
 <% else %>
   <dt>Quartos: Nenhum quarto disponível.</dt>
 <% end %>
+
 
 <% if user_signed_in? || (current_user.present? && current_user.id == @inn.id) %>
   <%= link_to 'Editar Pousada', edit_inn_path(@inn) %>

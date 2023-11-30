@@ -10,12 +10,11 @@ Rails.application.routes.draw do
   get 'my_reservations', to: 'reservations#my_reservations'
   
   resources :inns, only: [:show, :new, :create, :edit, :update] do
-      resources :ratings, only: [:index, :new, :create]
-    member do    
-      get 'byebye', to: 'reservations#byebye'
-    end
+      resources :ratings, only: [:index, :new, :create]     
+    get 'finish_checkout', to: 'reservations#finish_checkout'   
     get 'my_stays', to: 'reservations#my_stays'
     get 'my_active_stays', to: 'reservations#my_active_stays'
+    
     resources :rooms, only: [:new, :create, :show, :edit, :update] do 
       resources :prices, only: [:new, :create, :show, :destroy]
       resources :reservations, only: [:show, :new, :create, :destroy] do
