@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_28_230952) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_29_224354) do
   create_table "guests", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -62,6 +62,15 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_28_230952) do
     t.index ["room_id"], name: "index_prices_on_room_id"
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.integer "reservation_id", null: false
+    t.integer "rating"
+    t.text "review"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reservation_id"], name: "index_ratings_on_reservation_id"
+  end
+
   create_table "reservations", force: :cascade do |t|
     t.date "start_date"
     t.date "end_date"
@@ -99,6 +108,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_28_230952) do
     t.index ["inn_id"], name: "index_rooms_on_inn_id"
   end
 
+  create_table "user_responses", force: :cascade do |t|
+    t.integer "rating_id", null: false
+    t.text "response"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rating_id"], name: "index_user_responses_on_rating_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -114,6 +131,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_28_230952) do
 
   add_foreign_key "inns", "users"
   add_foreign_key "prices", "rooms"
+  add_foreign_key "ratings", "reservations"
   add_foreign_key "reservations", "rooms"
   add_foreign_key "rooms", "inns"
+  add_foreign_key "user_responses", "ratings"
 end

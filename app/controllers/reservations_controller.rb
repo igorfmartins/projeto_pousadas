@@ -64,9 +64,8 @@ class ReservationsController < ApplicationController
       redirect_to root_path, notice: 'Reserva confirmada com sucesso!'
     end
   
-    def my_reservations
-      @reservations = current_guest.reservations
-  
+    def my_reservations      
+      @reservations = current_guest.reservations  
       if @reservations.empty?
         flash.now[:notice] = 'Você não tem reservas.'
       end
@@ -82,6 +81,14 @@ class ReservationsController < ApplicationController
         redirect_to reservations_path, alert: 'Não é possível excluir a reserva nesta fase. Entre em contato conosco.'
       end
     end
+
+    def my_stays
+      @my_stays = current_user.inn.reservations
+    end
+
+    def my_active_stays
+      @active_stays = current_user.inn.reservations.where(active_stay: true)
+    end
   
     def checkin
       @reservation = Reservation.find(params[:id])
@@ -91,30 +98,35 @@ class ReservationsController < ApplicationController
       else
         redirect_to my_inn_reservations_path, alert: 'Check-in não permitido para esta reserva.'
       end
-    end
-
-    def my_active_stays
-      @active_stays = current_user.inn.reservations.where(active_stay: true)
-    end
+    end    
 
     def finish_stay
       @reservation = Reservation.find(params[:id])
-    
-      if @reservation.active_stay? && @reservation.checkout_datetime.nil?       
-         total_days = (@reservation.end_date - @reservation.start_date).to_i + 1
-         checkout_date = Date.current
-         total_paid = calculate_total_paid(@reservation.start_date, checkout_date, total_days)
-    
-         @reservation.update(
-         active_stay: false,
-         checkout_datetime: Time.now,
-         total_paid: total_paid,
-         payment_method: params[:payment_method] 
-         )    
-          redirect_to my_active_stays_inn_reservations_path, notice: 'Estadia finalizada com sucesso!'
+  
+      if @reservation.active_stay? && @reservation.checkout_datetime.nil?
+        total_days = (@reservation.end_date - @reservation.start_date).to_i + 1
+        checkout_date = Date.current
+        @total_paid = calculate_total_paid(@reservation.start_date, checkout_date, total_days)
+  
+        @reservation.update(
+          active_stay: false,
+          checkout_datetime: Time.now,
+          total_paid: @total_paid,
+          payment_method: params[:payment_method]
+        )
+  
+        if @reservation.rated?
+          redirect_to byebye_inn_path(@reservation.inn), notice: 'Estadia finalizada com sucesso!'
         else
-          redirect_to my_active_stays_inn_reservations_path, alert: 'A estadia não pode ser finalizada.'
+          redirect_to new_reservation_rating_path(@reservation), notice: 'Por favor, avalie sua estadia.'
         end
+      else
+        redirect_to my_reservations_path(@reservation), alert: 'A estadia não pode ser finalizada.'
+      end
+    end
+
+    def byebye
+
     end
   
     private

@@ -1,14 +1,16 @@
 <h1>Estadias Ativas</h1>
 
-<% if @active_stays.present? %>
-  <% @active_stays.each do |stay| %>
+<% if @my_stays.present? %>
+  <% @my_stays.each do |stay| %>
     <div>
       <p>Reserva: <%= stay.confirmation_code %></p>
       <p>Quarto: <%= stay.room.name %></p>
       <p>Número de Hóspedes: <%= stay.number_of_guests %></p>
       <p>Data de Entrada: <%= stay.start_date %></p>
       <p>Data de Saída: <%= stay.end_date %></p>    
-      <%= link_to 'Finalizar Estadia', finish_stay_inn_reservation_path(stay), method: :post %>
+
+      <%= button_to 'Finalizar Estadia', finish_stay_inn_room_reservation_path(stay.inn_id, stay.room_id, stay), method: :post %>
+
     </div>
   <% end %>
 <% else %>

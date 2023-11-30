@@ -1,11 +1,29 @@
 <h2>Minhas Reservas</h2>
-
 <% @reservations.each do |reservation| %>
   <p>
     Pousada: <%= reservation.room.inn.brand_name %><br>
+    Quarto: <%= reservation.room.name %><br>
     Data de Entrada: <%= reservation.start_date.strftime('%d/%m/%Y') %><br>
     Data de Saída: <%= reservation.end_date.strftime('%d/%m/%Y') %><br>
     Valor da Reserva: <%= number_to_currency(reservation.room.daily_rate) %><br>
     -------------------------------------------
   </p>
+
+  <% if reservation.status == 'completed' && !reservation.rated? %>
+    <%= form_for reservation, url: reservation_path(reservation), method: :patch do |f| %>
+      <div class="field">
+        <%= f.label :rating, 'Nota (0-5):' %>
+        <%= f.number_field :rating, in: 0..5 %>
+      </div>
+      <div class="field">
+        <%= f.label :review, 'Avaliação:' %>
+        <%= f.text_area :review, rows: 5 %>
+      </div>
+      <div class="actions">
+        <%= f.submit 'Enviar Avaliação' %>
+      </div>
+    <% end %>
+  <% end %>
 <% end %>
+
+<%= link_to 'Voltar à Página Inicial', root_path %>

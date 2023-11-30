@@ -1,6 +1,8 @@
 class Reservation < ApplicationRecord
+  attr_accessor :rating, :review
   belongs_to :room
   belongs_to :guest
+  belongs_to :inn
   validates :start_date, :end_date, :number_of_guests, presence: true
   validate :available?
   before_create :generate_confirmation_code
@@ -14,8 +16,16 @@ class Reservation < ApplicationRecord
     !conflicting_reservations.exists? && number_of_guests_ok
   end
   
+  def pending_checkin?
+    pre_status == 'pendente'
+  end
+  
   def checkin_allowed?
     pending_checkin? && Date.current >= start_date
+  end
+
+  def overdue_for_checkin?
+    Date.current > start_date + 2.days
   end
 
   def checkin!
@@ -24,15 +34,7 @@ class Reservation < ApplicationRecord
 
   def active_stay?
     active_stay
-  end
-
-  def pending_checkin?
-    pre_status == 'pendente'
-  end
-
-  def overdue_for_checkin?
-    Date.current > start_date + 2.days
-  end
+  end  
 
   def cancel_by_owner
     return unless pending_checkin? && overdue_for_checkin?
@@ -49,9 +51,7 @@ class Reservation < ApplicationRecord
   end
 
   def generate_unique_code
-    loop do
-      code = SecureRandom.hex(4).upcase
-      return code unless Reservation.exists?(confirmation_code: code)
-    end
+    codigo = (1..8).map { rand(10) }.join
+    return codigo
   end  
 end
