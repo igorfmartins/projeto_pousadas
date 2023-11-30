@@ -14,7 +14,8 @@ Rails.application.routes.draw do
     get 'finish_checkout', to: 'reservations#finish_checkout'   
     get 'my_stays', to: 'reservations#my_stays'
     get 'my_active_stays', to: 'reservations#my_active_stays'
-    
+    post 'finish_stay', to: 'reservations#finish'
+
     resources :rooms, only: [:new, :create, :show, :edit, :update] do 
       resources :prices, only: [:new, :create, :show, :destroy]
       resources :reservations, only: [:show, :new, :create, :destroy] do
@@ -27,7 +28,7 @@ Rails.application.routes.draw do
         get 'ready', on: :member 
 
         member do
-          post 'finish_stay', to: 'reservations#finish_stay'
+          
           post 'checkin'         
         end      
       end

@@ -3,13 +3,16 @@
 <% if @my_stays.present? %>
   <% @my_stays.each do |stay| %>
     <div>
+      <% reservation = Reservation.find_by(confirmation_code: stay.confirmation_code) %>
+      <% full_reservation = Reservation.find(reservation.id) %>
       <p>Reserva: <%= stay.confirmation_code %></p>
       <p>Quarto: <%= stay.room.name %></p>
-      <p>Número de Hóspedes: <%= stay.number_of_guests %></p>
-      <p>Data de Entrada: <%= stay.start_date %></p>
-      <p>Data de Saída: <%= stay.end_date %></p>    
-      <%= button_to 'Finish Stay', finish_stay_inn_room_reservation_path(@reservation.inn_id, @reservation.room_id, @reservation), method: :post %>
-      
+      <%= "Data de Entrada: #{full_reservation.attributes['start_date']}" %>
+      <br>
+      <%= "Data de Saída: #{full_reservation.attributes['end_date']}" %>
+      <br>
+      <%= "Número de Hóspedes: #{full_reservation.attributes['number_of_guests']}" %>  
+      <%= button_to 'Finalizar Estadia',  inn_finish_stay_path(@inn, full_reservation) %>
     </div>
   <% end %>
 <% else %>
