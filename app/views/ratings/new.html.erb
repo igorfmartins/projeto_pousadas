@@ -1,0 +1,17 @@
+<h1>Avaliar Reserva</h1>
+Nos ajude a melhorar o nosso atendimento contribuindo com sua nota para a avaliação de sua estadia.
+
+<%= form_with(model: [@reservation, @review], url: reservation_review_path(@reservation), local: true) do |form| %>
+  <%= form.hidden_field :room_id, value: @reservation.room_id %>
+  <div>
+    <%= form.label :rating, 'Nota (de 0 a 5)' %>
+    <%= form.number_field :rating, in: 0..5, step: 1, class: 'form-control' %>
+  </div>
+  <div>
+    <%= form.label :review_text, 'Avaliação' %>
+    <%= form.text_area :review_text, class: 'form-control' %>
+  </div>
+  <div>
+    <%= form.submit 'Enviar Avaliação' %>
+  </div>
+<% end %>

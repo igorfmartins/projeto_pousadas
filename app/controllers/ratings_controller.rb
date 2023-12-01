@@ -1,8 +1,9 @@
 class RatingsController < ApplicationController
 
     def index
-      @inn = Inn.find(params[:inn_id])
-      @ratings = @inn.ratings.order(created_at: :desc)
+      room_id = params[:room_id]
+      inn_id = params[:inn_id]  
+      @ratings = Rating.joins(:room, :inn).where(rooms: { id: room_id }, inns: { id: inn_id }).all
     end
   
     def new

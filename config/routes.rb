@@ -10,8 +10,7 @@ Rails.application.routes.draw do
   get 'my_reservations', to: 'reservations#my_reservations'
   
   resources :inns, only: [:show, :new, :create, :edit, :update] do
-      resources :ratings, only: [:index, :new, :create]     
-    get 'finish_checkout', to: 'reservations#finish_checkout'   
+      resources :ratings, only: [:index, :new, :create]    
     get 'my_stays', to: 'reservations#my_stays'
     get 'my_active_stays', to: 'reservations#my_active_stays'
     
@@ -22,22 +21,24 @@ Rails.application.routes.draw do
           resource :user_response, only: [:new, :create]
         end
         
-        get 'pre_save', on: :member
-        get 'confirmation', on: :member
-        get 'pre_confirmation', on: :member
-        get 'ready', on: :member 
+        get 'pre_save', to: 'reservations#pre_save'
+        get 'confirmation', to: 'reservations#confirmation'
+        get 'pre_confirmation', to: 'reservations#pre_confirmation'
+        get 'ready', to: 'reservations#ready'
         post 'finish_stay', to: 'reservations#finish_stay'
-
-        member do
-          
-          post 'checkin'         
-        end      
+        get 'finish_checkout', to: 'reservations#finish_checkout'
+        post 'checkin'         
+             
       end
     end
   end
 
   resources :cities, only: [] do
     get 'pousadas', to: 'cities#pousadas'
+  end
+
+  resources :reviews do
+    resource :response, only: [:new, :create]
   end
 
   namespace :api do

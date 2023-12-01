@@ -1,3 +1,3 @@
-class UserResponse < ApplicationRecord
-  belongs_to :rating
+class Response < ApplicationRecord
+  belongs_to :review
 end

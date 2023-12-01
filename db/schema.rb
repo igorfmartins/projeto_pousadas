@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_29_224354) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_30_223731) do
   create_table "guests", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -68,7 +68,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_224354) do
     t.text "review"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "room_id", null: false
     t.index ["reservation_id"], name: "index_ratings_on_reservation_id"
+    t.index ["room_id"], name: "index_ratings_on_room_id"
   end
 
   create_table "reservations", force: :cascade do |t|
@@ -85,6 +87,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_224354) do
     t.datetime "checkin_datetime"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "checkout_datetime"
+    t.decimal "total_paid"
     t.index ["room_id"], name: "index_reservations_on_room_id"
   end
 
@@ -132,6 +136,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_224354) do
   add_foreign_key "inns", "users"
   add_foreign_key "prices", "rooms"
   add_foreign_key "ratings", "reservations"
+  add_foreign_key "ratings", "rooms"
   add_foreign_key "reservations", "rooms"
   add_foreign_key "rooms", "inns"
   add_foreign_key "user_responses", "ratings"

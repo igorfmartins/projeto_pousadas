@@ -1,0 +1,12 @@
+<h1>Responder Avaliação</h1>
+
+<%= form_with(model: [@review, @response], url: review_response_path(@review), local: true) do |form| %>
+  <div>
+    <%= form.label :owner_response, 'Resposta do Dono da Pousada' %>
+    <%= form.text_area :owner_response, class: 'form-control' %>
+  </div>
+
+  <div>
+    <%= form.submit 'Enviar Resposta' %>
+  </div>
+<% end %>

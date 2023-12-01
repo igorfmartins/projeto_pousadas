@@ -11,24 +11,21 @@
     <% end %>
     Valor da Reserva: <%= number_to_currency(reservation.room.daily_rate) %><br>
   </p>
+<% end %>
 
   </p>
 
-  <% if reservation.status == 'completed' && !reservation.rated? %>
-    <%= form_for reservation, url: reservation_path(reservation), method: :patch do |f| %>
-      <div class="field">
-        <%= f.label :rating, 'Nota (0-5):' %>
-        <%= f.number_field :rating, in: 0..5 %>
-      </div>
-      <div class="field">
-        <%= f.label :review, 'Avaliação:' %>
-        <%= f.text_area :review, rows: 5 %>
-      </div>
-      <div class="actions">
-        <%= f.submit 'Enviar Avaliação' %>
-      </div>
-    <% end %>
+<h2>Minhas Reservas</h2>
+<% @my_stays.each do |reservation| %>
+  <% if !reservation.active_stay && !reservation.rated? %>
+    <p>
+      Pousada: <%= reservation.room.inn.brand_name %><br>
+      Quarto: <%= reservation.room.name %><br>
+      Valor da Reserva: <%= number_to_currency(reservation.room.daily_rate) %><br>
+      <%= link_to 'Avaliar Reserva', new_inn_room_reservation_rating_path(inn_id: reservation.inn_id, room_id: reservation.room_id, reservation_id: reservation.id) %>
+    </p>
   <% end %>
 <% end %>
 
+<br>
 <%= link_to 'Voltar à Página Inicial', root_path %>

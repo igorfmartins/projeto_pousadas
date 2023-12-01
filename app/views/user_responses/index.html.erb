@@ -1,0 +1,16 @@
+<h1>Avaliações</h1>
+
+<% @reviews.each do |review| %>
+  <div>
+    <p><strong>Nota:</strong> <%= review.rating %></p>
+    <p><strong>Avaliação:</strong> <%= review.review_text %></p>
+
+    <% if review.response %>
+      <p><strong>Resposta do Dono da Pousada:</strong> <%= review.response.owner_response %></p>
+    <% end %>
+
+    <% if current_user.owner? %>
+      <%= link_to 'Responder', new_review_response_path(review), class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+<% end %>

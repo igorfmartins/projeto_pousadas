@@ -1,5 +1,9 @@
 class UserResponsesController < ApplicationController
     before_action :authenticate_user!
+
+    def index     
+      @reviews = Review.all(params[:room_id])                 
+    end
   
     def new
       @rating = Rating.find(params[:rating_id])
@@ -22,4 +26,4 @@ class UserResponsesController < ApplicationController
     def user_response_params
       params.require(:user_response).permit(:response)
     end
-  end
+end

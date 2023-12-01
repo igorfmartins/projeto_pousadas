@@ -19,8 +19,10 @@
         <% if user_signed_in? %>
           Bem vindo Proprietário: <%= current_user.email %>
           <br>
-          <li><strong><%= link_to 'Reservas Cadastradas', inn_my_stays_path(current_user.inn) %></strong></li>
-          <li><strong><%= link_to 'Estadias Ativas', inn_my_active_stays_path(current_user.inn) %></strong></li>
+          <% if current_user.has_inn? %>
+            <li><strong><%= link_to 'Reservas Cadastradas', inn_my_stays_path(current_user.inn) %></strong></li>
+            <li><strong><%= link_to 'Estadias Ativas', inn_my_active_stays_path(current_user.inn) %></strong></li>
+          <% end %>
           <br>
           <%= button_to 'Sair', destroy_user_session_path, method: :delete %>
           <br>

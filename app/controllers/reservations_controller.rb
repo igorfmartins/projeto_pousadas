@@ -34,17 +34,26 @@ class ReservationsController < ApplicationController
   def new
     @room
     @reservation = Reservation.new(room: @room)
-    @daily = @room.daily_rate
+    @daily = @room.daily_rate    
   end
 
-  def create      
-    @room
+  def create
+    @room 
     @reservation = Reservation.new(reservation_params.merge(room: @room))
     @reservation.pre_status = 'pendente'
-
-    if @reservation.available?      
+  
+    if @reservation.available?
       if @reservation.save
-        redirect_to confirmation_inn_room_reservation_path(inn_id: @room.inn.id, room_id: @room.id, id: @reservation.id)
+        @reservation_params = params["reservation"]
+        route = route_params = {
+          inn_id: params["reservation"]["inn_id"],
+          room_id: params["reservation"]["room_id"],
+          reservation_id: @reservation.id,
+          start_date: params["reservation"]["start_date"],
+          end_date: params["reservation"]["end_date"],
+          number_of_guests: params["reservation"]["number_of_guests"]
+        }       
+        redirect_to inn_room_reservation_confirmation_path(route)
       else
         flash.now[:alert] = 'Erro ao salvar a reserva.'
         render :new
@@ -56,19 +65,21 @@ class ReservationsController < ApplicationController
   end
 
   def confirmation
-    @reservation = Reservation.find(params[:id])
+    @reservation_params = {inn_id: params["inn_id"], room_id: params["room_id"], reservation_id: params["reservation_id"],
+                          start_date: params["start_date"], end_date: params["end_date"],number_of_guests: params["number_of_guests"]}
+    @reservation = Reservation.find(params["reservation_id"])   
     @room = @reservation.room
     @inn = @room.inn
   end
 
   def ready
-    @reservation = Reservation.find(params[:id])
+    @reservation = Reservation.find(params["reservation_id"])
     @reservation.update(pre_status: 'confirmada')
     redirect_to root_path, notice: 'Reserva confirmada com sucesso!'
   end
 
   def my_reservations      
-    @reservations = current_guest.reservations  
+    @reservations = Reservation.find(params["guest_id"])
     if @reservations.empty?
       flash.now[:notice] = 'Você não tem reservas.'
     end
@@ -76,7 +87,6 @@ class ReservationsController < ApplicationController
 
   def destroy
     @reservation = Reservation.find(params[:id])
-
     if @reservation.deletable?
       @reservation.destroy
       redirect_to reservations_path, notice: 'Reserva excluída com sucesso.'
@@ -87,13 +97,13 @@ class ReservationsController < ApplicationController
 
   def my_stays
     @inn = current_user.inn.id 
-    @my_stays = current_user.inn.reservations
+    @my_stays = Reservation.where(inn_id: params["inn_id"], active_stay: true)  
   end
-
+    
   def my_active_stays
-    @active_stays = current_user.inn.reservations.where(active_stay: true)
-  end
-
+    @active_stays = Reservation.where(inn_id: params["inn_id"], pre_status: 'confirmada')   
+  end  
+ 
   def checkin
     @reservation = Reservation.find(params[:id])
     if @reservation.checkin_allowed?
@@ -107,27 +117,20 @@ class ReservationsController < ApplicationController
   def finish_stay
     @reservation = Reservation.find(params["reservation_id"])
     start_day = @reservation.attributes['start_date'].strftime("%Y%m%d").to_i
-    end_day = @reservation.attributes['end_date'].strftime("%Y%m%d").to_i      
-    total_days = (end_day - start_day) + 1
-    
-      checkout_date = Date.current
-      @total_paid = calculate_total_paid(@reservation.start_date, checkout_date, total_days)
+    end_day = @reservation.attributes['end_date'].strftime("%Y%m%d").to_i
+    checkout_date = Date.current.strftime("%Y%m%d").to_i
+    total_days = (checkout_date - start_day)
+    room_id = @reservation.attributes['room_id']
+    room = Room.find(room_id)
+    rate = room.daily_rate
 
-      @reservation.update(
-        active_stay: false,
-        checkout_datetime: Time.now,
-        total_paid: @total_paid,
-        payment_method: params[:payment_method]
-      )
-
-      if @reservation.rated?
-        redirect_to finish_checkout_inn_path(@reservation.inn), notice: 'Estadia finalizada com sucesso!'
-      else
-        redirect_to new_reservation_rating_path(@reservation), notice: 'Por favor, avalie sua estadia.'
-      end
-  
-    
-  end
+    @total_paid = total_days * rate * @reservation.attributes['number_of_guests'].to_i    
+    @reservation.active_stay = false
+    @reservation.checkout_datetime = Time.now
+    @reservation.total_paid = @total_paid        
+    @reservation.save
+    redirect_to root_path, alert: 'Check-out realizado.'
+  end   
 
   def finish_checkout
 
