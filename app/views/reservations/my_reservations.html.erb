@@ -3,29 +3,52 @@
   <p>
     Pousada: <%= reservation.room.inn.brand_name %><br>
     Quarto: <%= reservation.room.name %><br>
-    <% if reservation.start_date %>
-      Data de Entrada: <%= reservation.start_date.strftime('%d/%m/%Y') %><br>
-    <% end %>
-    <% if reservation.end_date %>
-      Data de Saída: <%= reservation.end_date.strftime('%d/%m/%Y') %><br>
-    <% end %>
+    Data de Entrada: <%= reservation.start_date.strftime('%d/%m/%Y') %><br>
+    Data de Saída: <%= reservation.end_date.strftime('%d/%m/%Y') %><br>
     Valor da Reserva: <%= number_to_currency(reservation.room.daily_rate) %><br>
-  </p>
+      
+    <% if reservation.status == "awaiting" %>
+      <strong> Sua reserva aguarda confirmação até o dia ???</strong>
+      <br>
+      <%= link_to 'Confirmar Reserva', inn_room_reservation_ready_path(reservation) %>
+
+      <% elsif reservation.status == "confirmed" && Date.current < reservation.start_date%>%>
+      <br>
+      <strong> Sua reserva esta confirmada. </strong>
+
+      <% elsif reservation.status == "confirmed" && Date.current >= reservation.start_date%>
+      <strong> Sua reserva esta confirmada, e ja pode realizar seu check-in no link abaixo. </strong>
+      <br>
+      <%= link_to 'Realizar Check-in', inn_room_reservation_checkin_path(inn_id: reservation.inn_id, room_id: reservation.room_id, reservation_id: reservation.id) %>
+
+      <% elsif reservation.status == "check-in" && Date.current < reservation.end_date%>
+      <br>
+      <strong> Sua reserva esta em andamento. </strong>
+
+      <% elsif reservation.status == "check-in" && Date.current >= reservation.end_date%>
+      <strong> Realize aqui seu check-out no link abaixo. </strong>
+      <br>
+      <%= link_to 'Realizar Check-out', inn_room_reservation_checkout_path(inn_id: reservation.inn_id ,room_id: reservation.room_id ,reservation_id: reservation.id) %>
+      
+      <% elsif reservation.status == "check-out" %>
+      <strong> Faça aqui a avaliação de sua estadia conosco. </strong>
+      <br>
+      <%= link_to 'Avaliação', new_inn_room_reservation_rating_path(inn_id: reservation.inn_id ,room_id: reservation.room_id ,reservation_id: reservation.id) %>
+      
+      <% elsif reservation.status == "rated" %>
+      <br>
+      <strong> Obrigado por sua avaliação. </strong> 
+
+      <% elsif reservation.status == "answered" %>
+      <br>
+      <strong> Veja aqui a resposta do Proprietário. </strong>   
+      <br>
+      ## falta o link para visualizar as respostas.
+
+    <% end %>
+  </p>   
+  <br>
+  ----------------------------------------------------------
 <% end %>
-
-  </p>
-
-<h2>Minhas Reservas</h2>
-<% @my_stays.each do |reservation| %>
-  <% if !reservation.active_stay && !reservation.rated? %>
-    <p>
-      Pousada: <%= reservation.room.inn.brand_name %><br>
-      Quarto: <%= reservation.room.name %><br>
-      Valor da Reserva: <%= number_to_currency(reservation.room.daily_rate) %><br>
-      <%= link_to 'Avaliar Reserva', new_inn_room_reservation_rating_path(inn_id: reservation.inn_id, room_id: reservation.room_id, reservation_id: reservation.id) %>
-    </p>
-  <% end %>
-<% end %>
-
 <br>
 <%= link_to 'Voltar à Página Inicial', root_path %>

@@ -15,7 +15,7 @@ class InnsController < ApplicationController
     @inn.user = current_user
 
     if @inn.save
-      flash[:notice] = 'Sua pousada foi cadastrada com sucesso!'
+      flash.now[:alert] = 'Sua pousada foi cadastrada com sucesso!'
       redirect_to root_path
     else
       flash.now[:alert] = 'Não foi possível cadastrar a pousada.'
@@ -29,7 +29,8 @@ class InnsController < ApplicationController
 
   def update
     if @inn.update(inn_params)
-      redirect_to @inn, notice: 'Pousada atualizada com sucesso.'
+      flash.now[:alert] = 'Pousada atualizada com sucesso.'
+      redirect_to @inn
     else
       flash.now[:alert] = 'Pousada não atualizada.'
       render 'edit'

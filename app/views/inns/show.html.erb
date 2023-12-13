@@ -70,11 +70,24 @@
   <dt>Quartos: Nenhum quarto disponível.</dt>
 <% end %>
 
-
 <% if user_signed_in? || (current_user.present? && current_user.id == @inn.id) %>
   <%= link_to 'Editar Pousada', edit_inn_path(@inn) %>
   <br>
 <% end %>
 <br>
+
+<h3><strong> Avaliações </strong></h3>
+<div>
+  <p>Nota Média: <%= @inn.average_rating || 'N/A' %></p>
+
+  <h4>Últimas 3 Avaliações:</h4>
+  <ul>
+    <% @inn.ratings.order(created_at: :desc).limit(3).each do |rating| %>
+      <li>
+        <strong><%= rating.rating %></strong>,<br> - <%= rating.review %>
+      </li>
+    <% end %>
+  </ul>
+</div>
 
 <%= link_to 'Voltar', root_path %>

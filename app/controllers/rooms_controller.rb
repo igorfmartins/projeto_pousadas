@@ -19,9 +19,10 @@ class RoomsController < ApplicationController
   def create
     @room = current_user.inn.rooms.build(room_params)
     if @room.save
-      redirect_to root_path, notice: 'Quarto adicionado com sucesso.'
+      flash.now[:alert] = 'Quarto adicionado com sucesso.'
+      redirect_to root_path
     else
-      flash[:alert] = 'Algo deu errado, tente novamente.'
+      flash.now[:alert] = 'Algo deu errado, tente novamente.'
       render :new
     end
   end
@@ -32,8 +33,9 @@ class RoomsController < ApplicationController
   end
 
   def update
-    if @room.update(room_params)
-      redirect_to root_path, notice: 'Quarto atualizado com sucesso.'
+    if @room.update(room_params) 
+      flash.now[:alert] = 'Quarto atualizado com sucesso.'
+      redirect_to root_path
     else
       flash.now[:alert] = 'Quarto não atualizado.'
       render 'edit'

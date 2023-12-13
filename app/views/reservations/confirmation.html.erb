@@ -1,40 +1,31 @@
 <h2>Confirmação da Reserva</h2>
 <h3>Sua reserva foi pré-agendada</h3>
 
-<p><strong>Quarto:</strong> <%= @room.name %></p>
-<p><strong>Descrição:</strong> <%= @room.description %></p>
-<p><strong>Data de Entrada:</strong> <%= @reservation_params[:start_date].to_date.strftime('%d/%m/%Y') %> no Horário de Check-in: <%= @inn.check_in_time.strftime('%H:%M') %>h</p>
-<p><strong>Data de Saída:</strong> <%= @reservation_params[:end_date].to_date.strftime('%d/%m/%Y') %> até o Horário de Check-out: <%= @inn.check_out_time.strftime('%H:%M') %>h</p>
-<p><strong>Número de Hóspedes:</strong> <%= @reservation_params[:number_of_guests] %></p>
+<p><strong>Quarto:</strong> <%= @reservation.room.name %></p>
+<p><strong>Descrição:</strong> <%= @reservation.room.description %></p>
+<p><strong>Data de Entrada:</strong> <%= @reservation.start_date.to_date.strftime('%d/%m/%Y') %> no Horário de Check-in: <%= @reservation.inn.check_in_time.strftime('%H:%M') %>h</p>
+<p><strong>Data de Saída:</strong> <%= @reservation.end_date.to_date.strftime('%d/%m/%Y') %> até o Horário de Check-out: <%= @reservation.inn.check_out_time.strftime('%H:%M') %>h</p>
+<p><strong>Número de Hóspedes:</strong> <%= @reservation.number_of_guests %></p>
 
-<% total_stay_days = Date.parse(@reservation_params[:end_date]) - Date.parse(@reservation_params[:start_date]) %>
+<% total_stay_days = (@reservation.end_date - @reservation.start_date).to_i %>
 <% # Verificar se há preços personalizados para o quarto e data específicos %>
-<% custom_prices = @room.prices.where(start_date: @reservation.start_date..@reservation.end_date) %>
+<% custom_prices = @reservation.room.prices.where(start_date: @reservation.start_date..@reservation.end_date) %>
+
 <% if custom_prices.exists? %>
-  <% total_cost = (custom_prices.sum(:daily_rate) * total_stay_days) * @reservation_params[:number_of_guests].to_i %>
+  <% total_cost = (custom_prices.sum(:daily_rate) * total_stay_days) * @reservation.number_of_guests.to_i %>
   <p><strong>Custo Total (com preço sazonal):</strong> <%= number_to_currency(total_cost) %></p>
 <% else %>
-  <% total_cost = (total_stay_days * @room.daily_rate) * @reservation_params[:number_of_guests].to_i %>
+  <% total_cost = (total_stay_days * @reservation.room.daily_rate) * @reservation.number_of_guests.to_i %>
   <p><strong>Custo Total (preço normal):</strong> <%= number_to_currency(total_cost) %></p>
 <% end %>
-<p><strong>Métodos de pagamento:</strong> <%= @inn.payment_methods %></p>
+<p><strong>Métodos de pagamento:</strong> <%= @reservation.inn.payment_methods %></p>
 
 <p>Para confirmar sua reserva, clique abaixo.<br>
 Lembre-se que você tem o prazo máximo de 7 dias antes da data de entrada para confirmar, 
 caso não, iremos desconsiderar sua reserva.</p>
-
-  <% @reservation.inn_id = @reservation_params[:inn_id] %>
-  <% @reservation.room_id = @reservation_params[:room_id] %>
-  <% @reservation.start_date = @reservation_params[:start_date] %>
-  <% @reservation.end_date = @reservation_params[:end_date] %>
-  <% @reservation.number_of_guests = @reservation_params[:number_of_guests] %>
-  <% @reservation.save %>
   
-  <%= link_to 'Confirmar Reserva', inn_room_reservation_ready_path(@reservation) %><br><br>
-  <p><strong>Código de Confirmação:</strong> <%= @reservation.confirmation_code %></p>
-
-<% if @reservation.pending_checkin? && Date.current >= Date.parse(@reservation_params[:start_date]) %>
-  <%= button_to 'Realizar Check-in', inn_room_reservation_checkin_path(inn_id: @reservation.inn_id, room_id: @reservation.room_id, id: @reservation), method: :post %>
-<% end %>
+<%= link_to 'Confirmar Reserva', inn_room_reservation_ready_path(@reservation) %><br><br>
+<p><strong>Código de Confirmação:</strong> <%= @reservation.confirmation_code %></p>
+<br>
 
 <%= link_to 'Voltar à Página Inicial', root_path %>

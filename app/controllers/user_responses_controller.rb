@@ -15,7 +15,8 @@ class UserResponsesController < ApplicationController
       @user_response = UserResponse.new(user_response_params.merge(rating: @rating))
   
       if @user_response.save
-        redirect_to inn_ratings_path, notice: 'Resposta enviada com sucesso.'
+        flash.now[:alert] = 'Resposta enviada com sucesso.'
+        redirect_to inn_ratings_path
       else
         render :new
       end

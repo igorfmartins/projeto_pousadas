@@ -12,9 +12,9 @@ class Inn < ApplicationRecord
         all.order(:brand_name)
       end
     end  
-
+    
     def average_rating
-      ratings.average(:score)&.round(1)
+      ratings.average(:rating)
     end
 end
   

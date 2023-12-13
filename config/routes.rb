@@ -9,30 +9,22 @@ Rails.application.routes.draw do
   get '/home/all/:city', to: 'home#all', as: 'all_home'
   get 'my_reservations', to: 'reservations#my_reservations'
   
-  resources :inns, only: [:show, :new, :create, :edit, :update] do
-      resources :ratings, only: [:index, :new, :create]    
+  resources :inns, only: [:show, :new, :create, :edit, :update] do        
     get 'my_stays', to: 'reservations#my_stays'
-    get 'my_active_stays', to: 'reservations#my_active_stays'
-    
+    get 'my_active_stays', to: 'reservations#my_active_stays'  
+  
     resources :rooms, only: [:new, :create, :show, :edit, :update] do 
       resources :prices, only: [:new, :create, :show, :destroy]
       resources :reservations, only: [:show, :new, :create, :destroy] do
-        resource :rating, only: [:new, :create] do
-          resource :user_response, only: [:new, :create]
-        end
-        
-        get 'pre_save', to: 'reservations#pre_save'
+        resources :ratings, only: [:index, :new, :create]       
         get 'confirmation', to: 'reservations#confirmation'
-        get 'pre_confirmation', to: 'reservations#pre_confirmation'
         get 'ready', to: 'reservations#ready'
-        post 'finish_stay', to: 'reservations#finish_stay'
-        get 'finish_checkout', to: 'reservations#finish_checkout'
-        post 'checkin'         
-             
+        get 'checkin', to: 'reservations#checkin'
+        get 'checkout', to: 'reservations#checkout'        
       end
     end
   end
-
+ 
   resources :cities, only: [] do
     get 'pousadas', to: 'cities#pousadas'
   end
